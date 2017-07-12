@@ -2,10 +2,7 @@
 
 int main(int argc,char const *argv[])
 {
-	//int fd=open("/dev/cardriver",O_WRONLY);
-	//if(fd<0)
-		//printf("device open failed.\n");
-	printf("searching for server\n");
+	printf("正在寻找服务器\n");
 	int client_fd=socket(AF_INET,SOCK_STREAM,0);
 	if(client_fd==-1)
 	{
@@ -21,21 +18,23 @@ int main(int argc,char const *argv[])
 	//客户端发送链接请求
 	if(connect(client_fd,(struct sockaddr*)&ser_addr,sizeof(ser_addr))==-1)
 	{
-		printf("Connect to the server failed\n");
+		printf("连接服务器失败\n");
 		exit(-1);
 	}
-	printf("The server has been successfully connected\n");
-	char ID[4]="2";
+	printf("已成功连接服务器\n");
+	char ID[4]="1";
 	send(client_fd,ID,strlen(ID),0);
 	char buf[1024];
+	printf("************\n0.暂停\n1.前进\n2.后退\n3.向前左转\n4.向前右转\n5.向后左转\n6.向后右转\n7.自动驾驶\n8.退出\n************\n");
 	while(1)
 	{
-    	bzero(buf,sizeof(buf));
-    	recv(client_fd,buf,sizeof(buf),0);
-    	printf("Server command %s has been received\n",buf);
-    	//int num=atoi(buf);//转换成整型数
-    	//write(fd,&num,1);
+		bzero(buf,sizeof(buf));
+    	gets(buf);
+    	send(client_fd,buf,strlen(buf),0);
+    	if (strcmp(buf,"8")==0)
+    		exit(-1);
+    	//bzero(buf,sizeof(buf));
+    	//recv(client_fd,buf,sizeof(buf),0);
+    	//printf("服务器已收到指令%s\n",buf);
     }
 }
-
-
